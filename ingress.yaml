@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: budget-app-ingress
+  namespace: budget-app
+spec:
+  rules:
+    - host: budget-app.info 
+      http:
+        paths:
+          - path: "/"
+            pathType: Prefix
+            backend:
+              service:
+                name: budget-app-web-service
+                port:
+                  number: 80
+          - path: "/db" 
+            pathType: Prefix
+            backend:
+              service:
+                name: budget-app-db-service
+                port:
+                  number: 5432
