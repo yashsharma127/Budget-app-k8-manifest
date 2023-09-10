@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: budget-app-db
+  labels:
+    app: budget-app-db
+  namespace: budget-app
+spec:
+  serviceName: budget-app-db
+  replicas: 1 
+  selector:
+    matchLabels:
+      app: budget-app-db
+  template:
+    metadata:
+      labels:
+        app: budget-app-db
+    spec:
+      containers:
+      - name: budget-app-db
+        image: yashsharma127/postgres-db-image:latest 
+        ports:
+        - containerPort: 5432 
+        env:
+        - name: POSTGRES_DB
+          value: Budgy_development
+        - name: POSTGRES_USER
+          value: Budgy
+        - name: POSTGRES_PASSWORD
+          value: budgy@2309
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: budget-app-db-service
+  labels:
+    app: budget-app-db
+  namespace: budget-app
+spec:
+  selector:
+    app: budget-app-db
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432
+  type: NodePort
