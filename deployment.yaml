@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: budget-app-web
+  labels:
+    app: budget-app-web
+  namespace: budget-app 
+spec:
+  replicas: 1 
+  selector:
+    matchLabels:
+      app: budget-app-web
+  template:
+    metadata:
+      labels:
+        app: budget-app-web
+    spec:
+      containers:
+      - name: budget-app-web
+        image: yashsharma127/budget-app-web:latest 
+        ports:
+        - containerPort: 3000 
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: budget-app-web-service
+  labels:
+    app: budget-app-web
+  namespace: budget-app
+spec:
+  selector:
+    app: budget-app-web
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
+  type: NodePort
+
